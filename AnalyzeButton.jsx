@@ -1,26 +1,30 @@
+console.log("AnalyzeButton rendered");
+import { useState, useCallback } from "react";
 import axios from "axios";
-import "../styles/AnalyzeButton.css";
 
-function AnalyzeButton({ images, setAnalysisResult }) {
-    const analyzeOutfit = async () => {
-        if (images.length === 0) {
-            alert("Upload at least one image!");
-            return;
-        }
+function AnalyzeButton({ image }) {
+    const [tags, setTags] = useState([]);
+    const [error, setError] = useState(null);
 
+    // Use useCallback to memoize the analyzeImage function
+    const analyzeImage = useCallback(async () => {
+        setError(null);
         try {
-            const formData = new FormData();
-            formData.append("imageUrl", URL.createObjectURL(images[0])); // Only sending first image for now
-
-            const response = await axios.post("http://localhost:5001/analyze", formData);
-            setAnalysisResult(response.data.result || "Analysis failed.");
-        } catch (error) {
-            console.error("Analysis Error:", error);
-            setAnalysisResult("Error analyzing the outfit.");
+            const response = await axios.post("/api/categorize", { image });
+            setTags(response.data.tags);
+        } catch (err) {
+            console.error("Error analyzing image:", err);
+            setError(err.response?.data?.error || "Failed to analyze image.");
         }
-    };
+    }, [image]); // Dependency array includes image
 
-    return <button onClick={analyzeOutfit} className="analyze-button">Analyze Outfit</button>;
+    return (
+        <div>
+            <button onClick={analyzeImage}>Analyze</button>
+            {error && <p>{error}</p>}
+            <ul>{tags.map((tag, index) => <li key={index}>{tag}</li>)}</ul>
+        </div>
+    );
 }
 
 export default AnalyzeButton;

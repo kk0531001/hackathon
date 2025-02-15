@@ -1,0 +1,46 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #000;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-sizing: border-box; /* Ensures padding doesn’t overflow */
+  }
+  
+  .navbar-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    white-space: nowrap; /* Prevents text from wrapping */
+  }
+  
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjusts spacing between Login & Signup */
+    margin-right: 30px; /* Prevents text from touching screen edge */
+    white-space: nowrap; /* Ensures text doesn't break to new lines */
+  }
+  
+  .navbar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Completely disables hover effects */
+  .navbar-link:hover,
+  .navbar-link:focus,
+  .navbar-link:active {
+    color: inherit !important;
+    text-decoration: none !important;
+    transition: none !important;
+    outline: none !important;
+  }

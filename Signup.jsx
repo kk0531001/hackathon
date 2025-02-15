@@ -1,21 +1,28 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { auth } from "../firebase";  // ✅ Import `auth` instead of `app`
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "../styles.css";
 
-function Signup() {
+const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate();  // ✅ Use React Router to navigate after signup
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("Signing up with:", email, password);
-    navigate("/upload");
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Signup successful!");
+      navigate("/login");  // ✅ Redirect user to login after signup
+    } catch (error) {
+      console.error("Error signing up:", error.message);
+      alert(error.message);
+    }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Signup</h2>
+    <div>
+      <h2>Sign Up</h2>
       <form onSubmit={handleSignup}>
         <input
           type="email"
@@ -31,10 +38,10 @@ function Signup() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Signup</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
-}
+};
 
 export default Signup;

@@ -3,33 +3,27 @@ import { Link } from "react-router-dom";
 import "../Home.css";
 
 const Home = () => {
-  const [text, setText] = useState("");
   const fullText = "Clothing Matcher";
-  let index = 0;
+  const [displayText, setDisplayText] = useState("");
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (index < fullText.length) {
-        setText((prev) => prev + fullText[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 100); // Adjust typing speed here
-  }, []);
+    if (index < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText((prev) => prev + fullText[index]);
+        setIndex(index + 1);
+      }, 100); // Adjust speed here (100ms per letter)
+      return () => clearTimeout(timeout);
+    }
+  }, [index, fullText]);
 
   return (
     <div className="home-container">
-      {/* Top Right - Login/Signup */}
+      <h1 className="main-title">{displayText}</h1>
+      <p className="subtext">Your AI-powered outfit assistant</p>
       <div className="auth-links">
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Signup</Link>
-      </div>
-
-      {/* Centered Content */}
-      <div className="content">
-        <h1>{text}</h1>
-        <p>Clothing Matcher</p>
+        <Link to="/login" className="auth-link">Login</Link>
+        <Link to="/signup" className="auth-link">Signup</Link>
       </div>
     </div>
   );
